@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.mints.masterslave.SpringConfiguration
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration.exclude[0]=com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+#spring.autoconfigure.exclude=com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+
+spring.autoconfigure.excludeName=DruidDataSourceAutoConfigure
