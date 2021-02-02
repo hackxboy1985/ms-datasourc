@@ -81,26 +81,46 @@ ms-datasource:
     domain-packages: com..*.*
     # 主数据源
     master:
-      jdbcUrl: 
-      username: 
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      url: jdbc:log4jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+      username: root
       password: 
-      # 连接池的配置
-      pool:
-        useConnPool: true
-        maxPoolSize: 10
-        connectionTimeout: 60
-        maxLifetime: 60
+      # 初始化连接大小
+      initial-size: 1
+      # 最小空闲连接数
+      min-idle: 1
+      max-active: 20
+      max-wait: 30000
+      # 可关闭的空闲连接间隔时间
+      time-between-eviction-runs-millis: 60000
+      # 配置连接在池中的最小生存时间
+      min-evictable-idle-time-millis: 300000
+      validation-query: select '1' from dual
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+
     # 从数据源
     slave:
-      jdbcUrl: 
-      username: 
-      password: 
-      # 连接池的配置
-      pool:
-        useConnPool: true
-        maxPoolSize: 10
-        connectionTimeout: 60
-        maxLifetime: 60
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      url: jdbc:log4jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+      username: test_reader
+      password: test_reader
+      # 初始化连接大小
+      initial-size: 1
+      # 最小空闲连接数
+      min-idle: 1
+      max-active: 20
+      max-wait: 30000
+      # 可关闭的空闲连接间隔时间
+      time-between-eviction-runs-millis: 60000
+      # 配置连接在池中的最小生存时间
+      min-evictable-idle-time-millis: 300000
+      validation-query: select '1' from dual
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+
 ```
 
 ### 项目中使用
