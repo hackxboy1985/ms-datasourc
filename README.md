@@ -12,13 +12,13 @@
 
 ## 主从数据源策略
 
-> 普通读写分离策略
+> 普通读写分离策略: NORMAL_RW
 * 优先级:方法切面<事务读写拦截<注解设置
 * 根据方法名来区分数据源
 * 根据事务是读还是写来区分数据源
 * 根据注解指定数据源
 
-> 写事务优先策略
+> 写事务优先策略: TX_WRITE_FIRST
 * 优先级:方法切面<注解设置<事务读写拦截
 * 采用此策略时：当存在写事务时，后续无论是读还是写，都遵循该写事务的数据源，避免写事务后出现从库读，而此时写库可能未同步到从库，出现幻读现象
 
@@ -76,7 +76,7 @@ ms-datasource:
     log:
       enabled: true
     # 策略设置
-    strategy: NORMAL_RW # NORMAL_RW TX_WRITE_FIRST
+    strategy: NORMAL_RW # NORMAL_RW 为普通读写策略 TX_WRITE_FIRST 为写事务优先策略
     # 实体类的扫描路径
     domain-packages: com..*.*
     # 主数据源
