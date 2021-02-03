@@ -59,6 +59,12 @@ public class DsStrategyTxWriteFirst implements DsStrategy {
         }
     }
 
+    /**
+     * 清除数据源
+     * @desc 根据stage的优先级决定是否能清除，如果当前所于写事务状态，无须清除，如果isRequestOver代表所有请求结束，必须清除所有线程相关数据
+     * @param isRequestOver 是否请求结束
+     * @param stage 阶段
+     */
     @Override
     public void clear(boolean isRequestOver, DsStrategyStage stage){
         int priority = getPriority(stage);

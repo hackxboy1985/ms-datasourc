@@ -50,7 +50,8 @@ public class DynamicDataSourceContextPriorityWrapper {
 
     public static void clear(boolean isOver){
         if (isOver) {
-            LOG.info("线程结束，清理全部数据源  {}", DynamicDataSourceContextHolder.get());
+            if (DynamicDataSourceContextHolder.get() != null)
+                LOG.info("线程结束，清理全部数据源  {}", DynamicDataSourceContextHolder.get());
             priorityDatesource.remove();
             writeDatesource.remove();
             DynamicDataSourceContextHolder.clear();

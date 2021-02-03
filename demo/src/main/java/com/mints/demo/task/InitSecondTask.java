@@ -6,12 +6,18 @@ import com.mints.demo.repository.UserSecondRepository;
 import org.mints.masterslave.TargetDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.mints.masterslave.datasource.DataSourceKey.MASTER;
 import static org.mints.masterslave.datasource.DataSourceKey.SLAVE;
 
 
-@Component
+@Service
+@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class InitSecondTask implements ISecondTask{
 
     @Autowired
@@ -21,7 +27,6 @@ public class InitSecondTask implements ISecondTask{
 
     Long id = null;
 
-    @TargetDataSource(dataSourceKey = MASTER)
     public void read(){
         System.out.println("----------开始读");
 //        DynamicDataSourceContextHolder.setMaster();
@@ -32,7 +37,7 @@ public class InitSecondTask implements ISecondTask{
         System.out.println("----------结束读");
     }
 
-    @TargetDataSource(dataSourceKey = SLAVE)
+    @Transactional(rollbackFor = Exception.class)
     public void write(){
         System.out.println("----------开始写");
 //        DynamicDataSourceContextHolder.setMaster();
@@ -42,10 +47,13 @@ public class InitSecondTask implements ISecondTask{
         user.setAge(25);
         User save = userSecondRepository.saveAndFlush(user);
         System.out.println("结果:"+save);
-//        System.out.println("写入后查询 缓存");
-//        userSecondRepository.findById(save.getId());
+        System.out.println("写入后查询 缓存");
+        System.out.println("查询1结果:"+userSecondRepository.getByOne());
+        System.out.println("查询2结果:"+userFirstRepository.findAll());
+//        Optional<User> byId = userSecondRepository.findById(save.getId());
 //        id = save.getId();
 //        DynamicDataSourceContextHolder.clear();
+//        System.out.println("写入后查询 结果"+byId.get());
 
         System.out.println("----------结束写");
     }

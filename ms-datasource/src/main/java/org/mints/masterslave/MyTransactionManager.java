@@ -3,8 +3,11 @@ package org.mints.masterslave;
 import cn.hutool.core.collection.CollectionUtil;
 import org.mints.masterslave.logger.MsLogger;
 import org.mints.masterslave.strategy.DsStrategy;
+import org.springframework.lang.Nullable;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionSynchronizationUtils;
 
@@ -35,8 +38,10 @@ public class MyTransactionManager extends JpaTransactionManager {
     }
 
     void resumeIfNeed(Object transaction){
-        if (suspendedResources.get() != null)
-            super.doResume(transaction,suspendedResources.get());
+        if (suspendedResources.get() != null) {
+            super.doResume(transaction, suspendedResources.get());
+            suspendedResources.remove();
+        }
     }
 
     @Override
@@ -52,11 +57,22 @@ public class MyTransactionManager extends JpaTransactionManager {
         super.doBegin(transaction, definition);
     }
 
+//    @Override
+//    protected void resume(@Nullable Object transaction, @Nullable AbstractPlatformTransactionManager.SuspendedResourcesHolder resourcesHolder) throws TransactionException {
+//    }
+
+    @Override
+    protected void doResume(@Nullable Object transaction, Object suspendedResources){
+        dsStrategy.clear(false,AOP_TRANSACTION_STAGE);
+        logger.info("[事务]doResume");
+        super.doResume(transaction,suspendedResources);
+        resumeIfNeed(transaction);
+    }
+
     @Override
     protected void doCleanupAfterCompletion(Object transaction) {
-
         dsStrategy.clear(false,AOP_TRANSACTION_STAGE);
-        logger.info("[事务]结束");
+        logger.info("[事务]doCleanupAfterCompletion");
         super.doCleanupAfterCompletion(transaction);
         resumeIfNeed(transaction);
     }
