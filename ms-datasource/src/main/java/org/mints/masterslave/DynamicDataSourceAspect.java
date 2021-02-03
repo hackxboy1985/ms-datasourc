@@ -22,7 +22,8 @@ import static org.mints.masterslave.strategy.DsStrategy.DsStrategyStage.AOP_ANNO
 import static org.mints.masterslave.strategy.DsStrategy.DsStrategyStage.AOP_INVOKE_METHOD_STAGE;
 
 @Aspect
-@Order(-1)
+//@Order(-1)
+@Order(0)
 public class DynamicDataSourceAspect {
     private static final MsLogger LOG = MsLogger.getLogger(DynamicDataSourceAspect.class);
 
