@@ -59,6 +59,19 @@
     </dependency>
   </dependencies>
 
+  <distributionManagement>
+    <repository>
+      <id>releases</id>
+      <name>Nexus Releases</name>
+      <url>http://test:8082/repository/maven-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>Internal Snapshots</name>
+      <url>http://test:8082/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <build>
     <plugins>
 
