@@ -23,7 +23,7 @@ public class DynamicDataSourceContextPriorityWrapper {
         if (priorityDatesource.get() != null && priorityDatesource.get() > priority)
             return;
 
-//        LOG.info("{} 使用数据源模式:{}",stage, master?"MASTER":"SLAVE");
+//        LOG.info("[ms-ds]{} 使用数据源模式:{}",stage, master?"MASTER":"SLAVE");
         priorityDatesource.set(priority);
     }
 
@@ -35,7 +35,7 @@ public class DynamicDataSourceContextPriorityWrapper {
         if (priority < getPriority())
             return;
         setPriority(stage,priority,true);
-        LOG.info("{} 使用数据源模式:{} {}",stage, true?"MASTER":"SLAVE", desc);
+        LOG.info("[ms-ds]{} 使用数据源模式:{} {}",stage, true?"MASTER":"SLAVE", desc);
         DynamicDataSourceContextHolder.setMaster();
     }
 
@@ -46,14 +46,14 @@ public class DynamicDataSourceContextPriorityWrapper {
         if (priority < getPriority())
             return;
         setPriority(stage,priority,false);
-        LOG.info("{} 使用数据源模式:{} {}",stage, false?"MASTER":"SLAVE", desc);
+        LOG.info("[ms-ds]{} 使用数据源模式:{} {}",stage, false?"MASTER":"SLAVE", desc);
         DynamicDataSourceContextHolder.setSlave();
     }
 
     public static void clear(boolean isOver){
         if (isOver) {
             if (DynamicDataSourceContextHolder.get() != null)
-                LOG.info("线程结束，清理全部数据源  {}", DynamicDataSourceContextHolder.get());
+                LOG.info("[ms-ds]线程结束，清理全部数据源  {}", DynamicDataSourceContextHolder.get());
             priorityDatesource.remove();
             writeDatesource.remove();
             DynamicDataSourceContextHolder.clear();
@@ -62,7 +62,7 @@ public class DynamicDataSourceContextPriorityWrapper {
 
         clearPriority();
         if (DynamicDataSourceContextHolder.get() != null) {
-            LOG.info("清理当前方法数据源  {}", DynamicDataSourceContextHolder.get());
+            LOG.info("[ms-ds]清理当前方法数据源  {}", DynamicDataSourceContextHolder.get());
             DynamicDataSourceContextHolder.clear();
         }
     }

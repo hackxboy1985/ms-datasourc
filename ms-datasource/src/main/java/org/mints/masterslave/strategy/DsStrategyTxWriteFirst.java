@@ -38,7 +38,7 @@ public class DsStrategyTxWriteFirst implements DsStrategy {
 
         if (DynamicDataSourceContextPriorityWrapper.getTxWriteStatus()){
             //TODO:当前已是写事务状态,使用主库
-            LOG.info("{} 存在写事务，使用MASTER {} 事务:{}", stage, desc, TransactionSynchronizationManager.isActualTransactionActive());
+            LOG.info("[ms-ds]{} 存在写事务，使用MASTER {} 事务:{}", stage, desc, TransactionSynchronizationManager.isActualTransactionActive());
             return;
         }
 

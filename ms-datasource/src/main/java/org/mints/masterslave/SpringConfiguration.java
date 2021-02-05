@@ -31,9 +31,9 @@ public class SpringConfiguration {
     @PostConstruct
     void init(){
 
-        LOG.info("主从数据源策略模式:{}",strategy);
-        LOG.info("主从数据源package:{}",domainpackages);
-        LOG.info("主从数据源日志开关:{}",enabled);
+        LOG.info("[ms-ds]主从数据源策略模式:{}",strategy);
+        LOG.info("[ms-ds]主从数据源package:{}",domainpackages);
+        LOG.info("[ms-ds]主从数据源日志开关:{}",enabled);
         MsLogger.setEnabled(enabled);
     }
 }

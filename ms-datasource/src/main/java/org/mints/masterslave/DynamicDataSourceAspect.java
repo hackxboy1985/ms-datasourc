@@ -78,7 +78,7 @@ public class DynamicDataSourceAspect {
                 //LOG.info("invoke method:{}", method.getName());
                 chooseDataSource(method.getName());
             } catch (Exception e) {
-                LOG.error("数据源异常：{}", e.getMessage(), e);
+                LOG.error("[ms-ds]choose数据源异常：{}", e.getMessage(), e);
             }
         }
     }
@@ -93,7 +93,7 @@ public class DynamicDataSourceAspect {
                 //LOG.info("invoke method:{}", method.getName());
                 dsStrategy.clear(false,AOP_INVOKE_METHOD_STAGE);
             } catch (Exception e) {
-                LOG.error("数据源异常：{}", e.getMessage(), e);
+                LOG.error("[ms-ds]clear数据源异常：{}", e.getMessage(), e);
             }
         }
     }

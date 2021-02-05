@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
+import org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy;
+import org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -43,7 +45,10 @@ public class JpaFirstConfiguration {
     private DataSource dynamicDataSource;
 
     @Value("${ms-datasource.domain-packages:com..*.*}")
-    public String domainPackages;//com.ydtc.**
+    private String domainPackages;//com.ydtc.**
+
+    @Value("${ms-datasource.implicit-naming:true}")
+    private boolean implicitNaming;
 
     /**
      * 配置第一个实体管理工厂的bean
@@ -53,6 +58,12 @@ public class JpaFirstConfiguration {
     @Bean(name = "entityManagerFactory")
     @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
+        //兼容驼峰命名法
+        if (implicitNaming) {
+            jpaProperties.getProperties().put("hibernate.physical_naming_strategy", SpringPhysicalNamingStrategy.class.getName());
+            jpaProperties.getProperties().put("hibernate.implicit_naming_strategy", SpringImplicitNamingStrategy.class.getName());
+        }
+
         return factoryBuilder.dataSource(dynamicDataSource)
 //        return factoryBuilder.dataSource(dataSource1)
                 //这一行的目的是加入jpa的其他配置参数比如（ddl-auto: update等）

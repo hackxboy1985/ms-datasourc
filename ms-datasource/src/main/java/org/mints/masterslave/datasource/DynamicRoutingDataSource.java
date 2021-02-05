@@ -16,7 +16,7 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
         DataSourceKey dataSourceKey = DynamicDataSourceContextHolder.get();
 
 //        logger.info("当前事务:{} name:{}", TransactionSynchronizationManager.isActualTransactionActive(), TransactionSynchronizationManager.getCurrentTransactionName());
-        logger.info("当前数据源:{}", dataSourceKey != null ? dataSourceKey.name() : "默认");
+        logger.info("[ms-ds]当前数据源:{}", dataSourceKey != null ? dataSourceKey.name() : "默认");
 //        String ds = dataSourceKey + "";
 //        if("SLAVE".equals(ds)) {
 //            logger.info("当前数据源：从数据库");

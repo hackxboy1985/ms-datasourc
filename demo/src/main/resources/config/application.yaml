@@ -16,10 +16,11 @@ spring:
 
 #MsDataSource
 ms-datasource:
-    log:
-      enabled: true
+    log.enabled: true
+    # 驼峰命名
+    implicit-naming: true
     multi-source-enabled: true
-    strategy: NORMAL_RW # NORMAL_RW TX_WRITE_FIRST
+    strategy: TX_WRITE_FIRST # NORMAL_RW TX_WRITE_FIRST
     type: com.alibaba.druid.pool.DruidDataSource
     master:
 #      driver-class-name: com.mysql.jdbc.Driver

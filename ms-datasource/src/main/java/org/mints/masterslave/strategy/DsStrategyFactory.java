@@ -8,7 +8,7 @@ public class DsStrategyFactory {
         } else if (DsStrategy.DsStrategyType.TX_WRITE_FIRST.name().equals(value)) {
             return new DsStrategyTxWriteFirst();
         }
-        throw new IllegalArgumentException("DsStrategyType参数异常");
+        throw new IllegalArgumentException("[ms-ds]DsStrategyType参数异常");
     }
 
 }

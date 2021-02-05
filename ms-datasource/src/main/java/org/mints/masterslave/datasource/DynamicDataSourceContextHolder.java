@@ -32,7 +32,7 @@ class DynamicDataSourceContextHolder {
      * @param value 需要设置的数据源ID
      */
     private static void set(DataSourceKey value) {
-        //LOG.info("设置数据源:{}",value.name());
+        //LOG.info("[ms-ds]设置数据源:{}",value.name());
         currentDatesource.set(value);
     }
 
