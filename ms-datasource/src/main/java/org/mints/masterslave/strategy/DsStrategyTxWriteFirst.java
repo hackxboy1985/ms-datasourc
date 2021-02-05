@@ -4,6 +4,7 @@ import org.mints.masterslave.datasource.DynamicDataSourceContextPriorityWrapper;
 import org.mints.masterslave.logger.MsLogger;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
  * 写事务优先策略:出现写事务，则后续数据源不变
@@ -31,14 +32,13 @@ public class DsStrategyTxWriteFirst implements DsStrategy {
     }
 
     @Override
-    public void doStrategy(DsStrategyStage stage, boolean read) {
+    public void doStrategy(DsStrategyStage stage, boolean read, String desc) {
         int priority = getPriority(stage);
         Integer current = DynamicDataSourceContextPriorityWrapper.getPriority();
 
         if (DynamicDataSourceContextPriorityWrapper.getTxWriteStatus()){
             //TODO:当前已是写事务状态,使用主库
-            LOG.info("{} 存在写事务，使用MASTER", stage);
-            //DynamicDataSourceContextPriorityWrapper.setMaster(stage, current);
+            LOG.info("{} 存在写事务，使用MASTER {} 事务:{}", stage, desc, TransactionSynchronizationManager.isActualTransactionActive());
             return;
         }
 
@@ -47,14 +47,14 @@ public class DsStrategyTxWriteFirst implements DsStrategy {
             if (read == false && priority == NormalPriority.AOP_TRANSACTION_STAGE.priority) {
                 //TODO:写事务优先策略下，强制
                 DynamicDataSourceContextPriorityWrapper.setTxWriteStatus();
-                DynamicDataSourceContextPriorityWrapper.setMaster(stage.name(), priority);
+                DynamicDataSourceContextPriorityWrapper.setMaster(stage.name(), priority,desc);
                 return;
             }
 
             if (read) {
-                DynamicDataSourceContextPriorityWrapper.setSlave(stage.name(), priority);
+                DynamicDataSourceContextPriorityWrapper.setSlave(stage.name(), priority,desc);
             } else {
-                DynamicDataSourceContextPriorityWrapper.setMaster(stage.name(), priority);
+                DynamicDataSourceContextPriorityWrapper.setMaster(stage.name(), priority,desc);
             }
         }
     }

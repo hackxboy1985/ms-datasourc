@@ -47,11 +47,11 @@ public class MyTransactionManager extends JpaTransactionManager {
     @Override
     protected void doBegin(Object transaction, TransactionDefinition definition) {
         if (definition.isReadOnly()){
-            logger.info("[事务]开始-只读 {}" , definition);
+            logger.info("[事务]开始-只读 {} {}" , definition,definition.getName());
         }else {
-            logger.info("[事务]开始-非只读 {}" , definition);
+            logger.info("[事务]开始-非只读 {} {}" , definition,definition.getName());
         }
-        dsStrategy.doStrategy(AOP_TRANSACTION_STAGE, definition.isReadOnly());
+        dsStrategy.doStrategy(AOP_TRANSACTION_STAGE, definition.isReadOnly(),definition.getName());
 
         suspendIfNeed(transaction);
         super.doBegin(transaction, definition);
@@ -64,7 +64,7 @@ public class MyTransactionManager extends JpaTransactionManager {
     @Override
     protected void doResume(@Nullable Object transaction, Object suspendedResources){
         dsStrategy.clear(false,AOP_TRANSACTION_STAGE);
-        logger.info("[事务]doResume");
+        logger.info("[事务]结束-doResume");
         super.doResume(transaction,suspendedResources);
         resumeIfNeed(transaction);
     }
@@ -72,7 +72,7 @@ public class MyTransactionManager extends JpaTransactionManager {
     @Override
     protected void doCleanupAfterCompletion(Object transaction) {
         dsStrategy.clear(false,AOP_TRANSACTION_STAGE);
-        logger.info("[事务]doCleanupAfterCompletion");
+        logger.info("[事务]结束-doCleanupAfterCompletion");
         super.doCleanupAfterCompletion(transaction);
         resumeIfNeed(transaction);
     }

@@ -24,7 +24,7 @@ public interface DsStrategy {
      * @param stage 阶段
      * @param read 是否只读
      */
-    void doStrategy(DsStrategyStage stage,boolean read);
+    void doStrategy(DsStrategyStage stage,boolean read, String desc);
 
     /**
      * 清除

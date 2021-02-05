@@ -2,6 +2,7 @@ package org.mints.masterslave;
 
 import cn.hutool.core.collection.CollectionUtil;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -45,13 +46,14 @@ public class DynamicDataSourceAspect {
      */
     @Before("@annotation(targetDataSource)")
     public void doBefore(JoinPoint joinPoint, TargetDataSource targetDataSource) {
+        Signature signature = joinPoint.getSignature();
         DataSourceKey dataSourceKey = targetDataSource.dataSourceKey();
         if (dataSourceKey == DataSourceKey.SLAVE) {
             //LOG.info(String.format("设置数据源为  %s", DataSourceKey.SLAVE));
-            setDsStrategy(AOP_ANNOTATION_STAGE,true);
+            setDsStrategy(AOP_ANNOTATION_STAGE,true, signature.getName());
         } else {
             //LOG.info(String.format("使用默认数据源  %s", DataSourceKey.MASTER));
-            setDsStrategy(AOP_ANNOTATION_STAGE,false);
+            setDsStrategy(AOP_ANNOTATION_STAGE,false, signature.getName());
         }
     }
 
@@ -101,8 +103,8 @@ public class DynamicDataSourceAspect {
 
     @PostConstruct
     void init(){
-        readMethodList.addAll(CollectionUtil.newArrayList("query*", "use*", "get*", "count*", "find*", "list*", "search*","exist*"));
-        writeMethodList.addAll(CollectionUtil.newArrayList("save*", "add*", "create*", "insert*", "update*", "merge*", "del*","remove","put","write"));
+        readMethodList.addAll(CollectionUtil.newArrayList("query*", "use*", "get*", "count*", "find*", "list*", "search*", "exist*", "have*"));
+        writeMethodList.addAll(CollectionUtil.newArrayList("save*", "add*", "create*", "insert*", "update*", "merge*", "del*","remove*","put*","write*"));
     }
 
     void chooseDataSource(String methodName){
@@ -114,11 +116,11 @@ public class DynamicDataSourceAspect {
             //选择master数据源
             isRead = false;
         }
-        setDsStrategy(AOP_INVOKE_METHOD_STAGE,isRead);
+        setDsStrategy(AOP_INVOKE_METHOD_STAGE,isRead,methodName);
     }
 
-    void setDsStrategy(DsStrategy.DsStrategyStage stage, boolean isRead){
-        dsStrategy.doStrategy(stage,isRead);
+    void setDsStrategy(DsStrategy.DsStrategyStage stage, boolean isRead, String methodName){
+        dsStrategy.doStrategy(stage,isRead,methodName);
     }
 
     private boolean isChooseWriteDB(String methodName) {

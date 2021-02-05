@@ -23,7 +23,7 @@ public class DynamicDataSourceContextPriorityWrapper {
         if (priorityDatesource.get() != null && priorityDatesource.get() > priority)
             return;
 
-        LOG.info("{} 使用数据源模式:{}",stage, master?"MASTER":"SLAVE");
+//        LOG.info("{} 使用数据源模式:{}",stage, master?"MASTER":"SLAVE");
         priorityDatesource.set(priority);
     }
 
@@ -31,20 +31,22 @@ public class DynamicDataSourceContextPriorityWrapper {
         priorityDatesource.remove();
     }
 
-    public static void setMaster(String stage, Integer priority) {
+    public static void setMaster(String stage, Integer priority, String desc) {
         if (priority < getPriority())
             return;
         setPriority(stage,priority,true);
+        LOG.info("{} 使用数据源模式:{} {}",stage, true?"MASTER":"SLAVE", desc);
         DynamicDataSourceContextHolder.setMaster();
     }
 
     /**
      * 设置从从库读取数据
      */
-    public static void setSlave(String stage, Integer priority) {
+    public static void setSlave(String stage, Integer priority, String desc) {
         if (priority < getPriority())
             return;
         setPriority(stage,priority,false);
+        LOG.info("{} 使用数据源模式:{} {}",stage, false?"MASTER":"SLAVE", desc);
         DynamicDataSourceContextHolder.setSlave();
     }
 

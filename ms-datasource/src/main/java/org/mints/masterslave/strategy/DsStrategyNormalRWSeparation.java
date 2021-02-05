@@ -27,14 +27,14 @@ public class DsStrategyNormalRWSeparation implements DsStrategy {
     }
 
     @Override
-    public void doStrategy(DsStrategyStage stage, boolean read) {
+    public void doStrategy(DsStrategyStage stage, boolean read, String desc) {
         int priority = getPriority(stage);
         Integer current = DynamicDataSourceContextPriorityWrapper.getPriority();
         if (priority > current) {
             if (read) {
-                DynamicDataSourceContextPriorityWrapper.setSlave(stage.name(), priority);
+                DynamicDataSourceContextPriorityWrapper.setSlave(stage.name(), priority, desc);
             } else {
-                DynamicDataSourceContextPriorityWrapper.setMaster(stage.name(), priority);
+                DynamicDataSourceContextPriorityWrapper.setMaster(stage.name(), priority, desc);
             }
         }
     }
