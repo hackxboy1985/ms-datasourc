@@ -103,7 +103,7 @@ public class DynamicDataSourceAspect {
 
     @PostConstruct
     void init(){
-        readMethodList.addAll(CollectionUtil.newArrayList("query*", "use*", "get*", "count*", "find*", "list*", "search*", "exist*", "have*"));
+        readMethodList.addAll(CollectionUtil.newArrayList("query*", "use*", "get*", "count*", "find*", "list*", "search*", "exist*", "have*", "select*"));
         writeMethodList.addAll(CollectionUtil.newArrayList("save*", "add*", "create*", "insert*", "update*", "merge*", "del*","remove*","put*","write*"));
     }
 
