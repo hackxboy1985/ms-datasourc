@@ -20,7 +20,7 @@ ms-datasource:
     # 驼峰命名
     implicit-naming: true
     multi-source-enabled: true
-    strategy: TX_WRITE_FIRST # NORMAL_RW TX_WRITE_FIRST
+    strategy: NORMAL_RW # NORMAL_RW TX_WRITE_FIRST
     type: com.alibaba.druid.pool.DruidDataSource
     master:
 #      driver-class-name: com.mysql.jdbc.Driver
