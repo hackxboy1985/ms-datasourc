@@ -1,5 +1,6 @@
 package com.mints.demo.task;
 
+import org.mints.masterslave.MyTransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,14 @@ public class TestController {
 
     @GetMapping(value = "/test2")
     public ResponseEntity test2() throws Exception {
-        iSecondTask.readWriteRead();
+//        MyTransactionManager.testTrigger = 1;
+        iSecondTask.read();
+        try {
+            iSecondTask.write();
+        }catch (Exception e){}
+//        MyTransactionManager.testTrigger = 0;
+
+//        iSecondTask.readWriteRead();
 
         return new ResponseEntity("ok", HttpStatus.OK);
     }

@@ -37,7 +37,7 @@ public class InitSecondTask implements ISecondTask{
         System.out.println("----------结束读");
     }
 
-    @Transactional(rollbackFor = Exception.class)
+//    @Transactional(rollbackFor = Exception.class)
     public void write(){
         System.out.println("----------开始写");
 //        DynamicDataSourceContextHolder.setMaster();
@@ -45,6 +45,7 @@ public class InitSecondTask implements ISecondTask{
         User user = new User();
         user.setName("test");
         user.setAge(25);
+        user.setTestAge(2);
         User save = userSecondRepository.saveAndFlush(user);
         System.out.println("结果:"+save);
         System.out.println("写入后查询 缓存");

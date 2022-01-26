@@ -11,6 +11,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>ms-datasource</artifactId>
   <name>Mints::MasterSlaveDatasource</name>
+  <version>1.1</version>
 
 
   <dependencies>

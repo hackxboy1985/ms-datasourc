@@ -16,8 +16,8 @@ public class SecondTaskRunner implements CommandLineRunner{
     @Override
     public void run(String... args) throws Exception {
 
-        iSecondTask.read();
-//        iSecondTask.write();
+//        iSecondTask.read();
+        iSecondTask.write();
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {

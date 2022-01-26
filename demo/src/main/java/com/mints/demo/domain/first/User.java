@@ -14,6 +14,9 @@ public class User {
 
     private Integer age;
 
+    @Column(name = "testAge")
+    private Integer test_age;
+
     public Long getId() {
         return id;
     }
@@ -36,5 +39,8 @@ public class User {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+    public void setTestAge(Integer age) {
+        this.test_age = age;
     }
 }
