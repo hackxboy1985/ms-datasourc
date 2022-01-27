@@ -35,6 +35,10 @@ public class SecondTaskRunner implements CommandLineRunner{
             @Override
             public Object call() throws Exception {
                 iSecondTask.read();
+
+                iSecondTask.write();
+
+                iSecondTask.readNoneTs();
                 return null;
             }
         });
