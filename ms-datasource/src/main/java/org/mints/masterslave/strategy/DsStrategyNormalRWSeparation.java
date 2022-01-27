@@ -26,6 +26,11 @@ public class DsStrategyNormalRWSeparation implements DsStrategy {
         return NormalPriority.valueOf(stage.name()).priority;
     }
 
+    /**
+     * 执行多数据源策略:读写分离
+     * @param stage 阶段
+     * @param read 是否只读
+     */
     @Override
     public void doStrategy(DsStrategyStage stage, boolean read, String desc) {
         int priority = getPriority(stage);

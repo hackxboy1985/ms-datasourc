@@ -60,10 +60,10 @@ public class InitSecondTask implements ISecondTask{
     }
 
     public void readNoneTs(){
-        System.out.println(Thread.currentThread().getName()+"----------开始读");
-        userSecondRepository.findById(114L);
+        System.out.println(Thread.currentThread().getName()+"----------开始读25");
+        userSecondRepository.findById(25L);
 //        userSecondRepository.getByOne();
-        System.out.println(Thread.currentThread().getName()+"----------结束读");
+        System.out.println(Thread.currentThread().getName()+"----------结束读25");
     }
 
     @TargetDataSource(dataSourceKey = MASTER)

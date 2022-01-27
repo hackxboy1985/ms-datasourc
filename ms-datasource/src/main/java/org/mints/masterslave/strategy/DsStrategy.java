@@ -7,7 +7,8 @@ public interface DsStrategy {
      * 策略类型
      */
     enum DsStrategyType {
-        NORMAL_RW, TX_WRITE_FIRST
+        NORMAL_RW,   /* 正常读写 */
+        TX_WRITE_FIRST /* 写优先 */
     }
 
     /**

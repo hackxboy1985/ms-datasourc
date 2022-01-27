@@ -76,9 +76,22 @@
         <appender-ref ref="file"/>
     </logger>
 
-    <!--<logger name="org.hibernate" level="ERROR" additivity="false">-->
-        <!--&lt;!&ndash;<appender-ref ref="console"/>&ndash;&gt;-->
-        <!--&lt;!&ndash;<appender-ref ref="file"/>&ndash;&gt;-->
+    <!-- 1. 输出SQL 到控制台和文件-->
+    <!--<logger name="org.hibernate.SQL" additivity="false" >-->
+        <!--<level value="DEBUG" />-->
+        <!--<appender-ref ref="file" />-->
+        <!--<appender-ref ref="console" />-->
+    <!--</logger>-->
+    <!--&lt;!&ndash;    &lt;!&ndash; 2. 输出SQL 的参数到控制台和文件&ndash;&gt;&ndash;&gt;-->
+    <!--<logger name="org.hibernate.type.descriptor.sql.BasicBinder" additivity="false" level="TRACE" >-->
+        <!--<level value="TRACE" />-->
+        <!--<appender-ref ref="file" />-->
+        <!--<appender-ref ref="console" />-->
+    <!--</logger>-->
+
+    <!--<logger name="org.hibernate" level="TRACE" additivity="false">-->
+        <!--<appender-ref ref="console"/>-->
+        <!--<appender-ref ref="file"/>-->
     <!--</logger>-->
 
 </configuration>

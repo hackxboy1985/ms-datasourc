@@ -2,6 +2,12 @@ server:
   port: 8077
 spring:
   jpa:
+#    properties:
+#      hibernate:
+#        format_sql: true
+#    #配置在日志中打印出执行的 SQL 语句信息。
+#    show-sql: false
+
     open-in-view: false #view层的session缓存开关
     hibernate:
 #      show_sql: false
@@ -16,12 +22,30 @@ spring:
 
 #MsDataSource
 ms-datasource:
+    # 多数据源开启
+    enabled: true
+    # 多账套开启:false则读取master/slave,true则仅读取main
+    suit-enabled: true
+    # 日志开关
     log.enabled: true
     # 驼峰命名
     implicit-naming: true
-    multi-source-enabled: true
+    # 缺省数据源
+    suit-default-ds-name: MASTER
+    # 策略自动读写分离
     strategy: NORMAL_RW # NORMAL_RW TX_WRITE_FIRST
     type: com.alibaba.druid.pool.DruidDataSource
+    main:
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      url: jdbc:log4jdbc:mysql://127.0.0.1:3306/api_main?useUnicode=true&allowMultiQueries=true&useSSL=false&characterEncoding=UTF-8
+      username: root
+      password:
+      # 初始化连接大小
+      initial-size: 1
+      # 最小空闲连接数
+      min-idle: 1
+      max-active: 20
+
     master:
 #      driver-class-name: com.mysql.jdbc.Driver
       driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy

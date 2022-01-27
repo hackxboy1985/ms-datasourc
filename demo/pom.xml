@@ -16,7 +16,13 @@
         <dependency>
             <groupId>com.mints-id</groupId>
             <artifactId>ms-datasource</artifactId>
-            <version>1.0</version>
+            <version>1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
         </dependency>
 
         <!--<dependency>-->
@@ -52,12 +58,6 @@
 
 
 
-        <!--工具包-->
-        <!--<dependency>-->
-            <!--<groupId>cn.hutool</groupId>-->
-            <!--<artifactId>hutool-all</artifactId>-->
-            <!--<version>5.3.0</version>-->
-        <!--</dependency>-->
     </dependencies>
 
 
@@ -67,6 +67,40 @@
                 <!--<groupId>org.springframework.boot</groupId>-->
                 <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
             <!--</plugin>-->
+
+            <plugin>
+
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.4</version>
+                <configuration>
+
+                    <repository>test:5000/ms-datasource-demo</repository>
+
+                    <contextDirectory>./</contextDirectory>
+
+                    <!-- 配置的构建的Docker image的tag -->
+                    <!--<tag>${project.version}</tag>-->
+                    <tag>deploy</tag>
+
+                    <!-- 以下两行是为了docker push到DockerHub使用的。 -->
+                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                </configuration>
+                <!-- package 即 build-->
+                <executions>
+
+                    <execution>
+                        <id>build-push-image</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>build</goal>
+                            <!--<goal>push</goal>-->
+                        </goals>
+                    </execution>
+
+                </executions>
+            </plugin>
+
             <!-- 跳过单元测试 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

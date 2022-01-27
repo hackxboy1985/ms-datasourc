@@ -78,7 +78,7 @@ spring:
 ### 数据源配置
 ms-datasource:
     # 配置开关
-    multi-source-enabled: true
+    enabled: true
     # 日志开关
     log.enabled: true
     # 驼峰命名
