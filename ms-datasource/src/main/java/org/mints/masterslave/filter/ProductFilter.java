@@ -2,6 +2,7 @@ package org.mints.masterslave.filter;
 
 
 
+import org.mints.masterslave.ProductUtils;
 import org.mints.masterslave.SuitDataSourceConfiguration;
 import org.mints.masterslave.datasource.SuitRoutingDataSourceContext;
 import org.mints.masterslave.entity.PkgDataSource;
@@ -28,12 +29,12 @@ import java.security.InvalidParameterException;
 public class ProductFilter implements Filter {
 
 //    private static final MsLogger log = MsLogger.getLogger(ProductFilter.class);
-    private static final Logger logger = LoggerFactory.getLogger(SuitDataSourceConfiguration.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductFilter.class);
 
-    private JdbcTemplate jdbcTemplate;
+    private ProductUtils productUtils;
 
-    public ProductFilter(JdbcTemplate jdbcTemplate){
-        this.jdbcTemplate = jdbcTemplate;
+    public ProductFilter(ProductUtils productUtils){
+        this.productUtils = productUtils;
     }
 
 
@@ -43,25 +44,6 @@ public class ProductFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         logger.info("[ms-ds][ProductFilter] filter初始化:{}",filterConfig);
-    }
-
-    public PkgDataSource getSuitProduct(String pkg) {
-        if(StringUtils.isEmpty(pkg))
-            throw new InvalidParameterException("参数pkg异常-"+pkg);
-        String sql = "select ds from pkg_datasource where pkg= ? ";
-        RowMapper<PkgDataSource> rowMapper = new BeanPropertyRowMapper<>(PkgDataSource.class);
-        PkgDataSource pkgDataSource = null;
-        try {
-            pkgDataSource = jdbcTemplate.queryForObject(sql, rowMapper, pkg);
-        }catch (EmptyResultDataAccessException e){
-            //log.error(e.getMessage(),e);
-        }
-
-//        if (pkgDataSource == null){
-//            logger.info("[ms-ds][ProductFilter]Query product {} empty! please verity the datasource info in table: pkg_datasource",pkg);
-//            throw new InvalidParameterException(pkg+"-包配置不存在,请检查该产品数据源配置");
-//        }
-        return pkgDataSource;
     }
 
     @Override
@@ -77,7 +59,7 @@ public class ProductFilter implements Filter {
 
         logger.debug("[ms-ds][ProductFilter] {} get pkg: {}", hr.getRequestURI(),pkg);
         try {
-            PkgDataSource suitProduct = getSuitProduct(pkg);
+            PkgDataSource suitProduct = productUtils.getSuitProduct(pkg);
             SuitRoutingDataSourceContext.setDataSourceProductKey(suitProduct.getDs());
             filterChain.doFilter(request, response);
             SuitRoutingDataSourceContext.clearThreadLocalAllKey();

@@ -2,11 +2,14 @@ package com.mints.demo.task;
 
 
 import com.mints.demo.FuturesExecutorUtil;
+import org.mints.masterslave.ProductUtils;
 import org.mints.masterslave.datasource.SuitRoutingDataSourceContext;
+import org.mints.masterslave.entity.PkgDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 
@@ -17,11 +20,21 @@ public class SecondTaskRunner implements CommandLineRunner{
     @Autowired
     ISecondTask iSecondTask;
 
+    @Autowired
+    ProductUtils productUtils;
+
     @Override
     public void run(String... args) throws Exception {
-        SuitRoutingDataSourceContext.setDataSourceProductKey("test");
+
+        List<PkgDataSource> suitProductList = productUtils.getSuitProductList();
+        for (PkgDataSource pkgDataSource : suitProductList){
+            SuitRoutingDataSourceContext.setDataSourceProductKey(pkgDataSource.getDs());
+            iSecondTask.write();
+        }
+
+//        SuitRoutingDataSourceContext.setDataSourceProductKey("test");
 //        iSecondTask.read();
-        iSecondTask.write();
+//        iSecondTask.write();
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {

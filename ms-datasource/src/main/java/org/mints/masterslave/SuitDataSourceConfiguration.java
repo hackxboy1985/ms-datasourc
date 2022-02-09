@@ -53,11 +53,17 @@ public class SuitDataSourceConfiguration {
     }
 
     @ConditionalOnProperty(value = {"ms-datasource.product-default-mode"}, havingValue = "true", matchIfMissing = false)
+    @Bean
+    ProductUtils productUtils(JdbcTemplate jdbcTemplate){
+        return new ProductUtils(jdbcTemplate);
+    }
+
+    @ConditionalOnProperty(value = {"ms-datasource.product-default-mode"}, havingValue = "true", matchIfMissing = false)
     @DependsOn({"dataSourceMain","dataSource"})
     @Bean
     ProductFilter pdFilter(JdbcTemplate jdbcTemplate) {
-        log.info("[ms-ds][SuitDataSourceConfiguration] 创建TimeFilter");
-        return new ProductFilter(jdbcTemplate);
+        log.info("[ms-ds][SuitDataSourceConfiguration] 创建ProductFilter");
+        return new ProductFilter(productUtils(jdbcTemplate));
     }
 
 
