@@ -21,7 +21,7 @@ public class SpringConfiguration {
     @Value("${ms-datasource.suit-enabled:false}")
     Boolean suitEnabled;
 
-    @Value("${ms-datasource.product-default-mode:true}")
+    @Value("${ms-datasource.product-default-mode:false}")
     String productMode;
 
     @Value("${ms-datasource.log.enabled:false}")
