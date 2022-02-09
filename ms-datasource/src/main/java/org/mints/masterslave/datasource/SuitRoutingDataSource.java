@@ -52,10 +52,10 @@ public class SuitRoutingDataSource extends AbstractRoutingDataSource {
 
         EncryptAESUtil.init("su","mints@0419");
 
-        log.info("[MsDynamic][RoutingDataSource]初始化主数据源");
+        log.info("[ms-ds][RoutingDataSource]初始化主数据源");
 //        if (StringUtils.isEmpty(main_url) || StringUtils.isEmpty(main_username)){
         if (dataSourceMain == null){
-            throw new RuntimeException("[MsDynamic]未配置主库:ms-datasource.main.url or ms-datasource.main.username is null");
+            throw new RuntimeException("[ms-ds]未配置主库:ms-datasource.main.url or ms-datasource.main.username is null");
         }
         createAndSaveDataSource(SuitRoutingDataSourceContext.getMainKey());
 
@@ -74,17 +74,17 @@ public class SuitRoutingDataSource extends AbstractRoutingDataSource {
     protected Object determineCurrentLookupKey(){
         String currentAccountSuit = SuitRoutingDataSourceContext.getDataSourceRoutingKey();
         if (StringUtils.isEmpty(currentAccountSuit)) {
-            throw new RuntimeException("[MsDynamic]CurrentSuit["+ currentAccountSuit +"] error!!!");
+            throw new RuntimeException("[ms-ds]CurrentSuit["+ currentAccountSuit +"] error!!!");
         }
-        log.info("[MsDynamic][RoutingDataSource] 当前操作账套:{}", currentAccountSuit);
+        log.info("[ms-ds][RoutingDataSource] 当前操作账套:{}", currentAccountSuit);
         Utils.traceStack();
         if (!dataSources.containsKey(currentAccountSuit)){
-           log.info("[MsDynamic][RoutingDataSource] {}数据源不存在, 创建对应的数据源", currentAccountSuit);
+           log.info("[ms-ds][RoutingDataSource] {}数据源不存在, 创建对应的数据源", currentAccountSuit);
             createAndSaveDataSource(currentAccountSuit);
         } else {
             //log.info("{}数据源已存在不需要创建", currentAccountSuit);
         }
-        log.info("[MsDynamic][RoutingDataSource] 切换到{}数据源", currentAccountSuit);
+        log.info("[ms-ds][RoutingDataSource] 切换到{}数据源", currentAccountSuit);
         return currentAccountSuit;
     }
 
@@ -94,7 +94,7 @@ public class SuitRoutingDataSource extends AbstractRoutingDataSource {
         dataSources.put(currentAccountSuit, dataSource);
         super.setTargetDataSources(dataSources);
         afterPropertiesSet();
-        log.info("[MsDynamic][RoutingDataSource] {}数据源创建成功", currentAccountSuit);
+        log.info("[ms-ds][RoutingDataSource] {}数据源创建成功", currentAccountSuit);
     }
 
     /**
@@ -161,15 +161,16 @@ public class SuitRoutingDataSource extends AbstractRoutingDataSource {
             url = url.replace("jdbc:mysql", "jdbc:log4jdbc:mysql");
             dataSource.setDriverClassName(driverSpy);//支持日志打印
         }else{
-            dataSource.setDriverClassName(driverMysql);
+//            dataSource.setDriverClassName(driverMysql);
+            dataSource.setDriverClassName(driverSpy);//支持日志打印
         }
         dataSource.setUrl(url);
         dataSource.setUsername(suitDataSource.getUsername());
         dataSource.setPassword(suitDataSource.getPassword());
 
         dataSource.setInitialSize(1);
-        dataSource.setMaxActive(100);
         dataSource.setMinIdle(1);
+        dataSource.setMaxActive(100);
         dataSource.setMaxWait(60000);
         dataSource.setPoolPreparedStatements(true);
         dataSource.setMaxPoolPreparedStatementPerConnectionSize(20);

@@ -4,14 +4,16 @@ package org.mints.masterslave;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.mints.masterslave.datasource.SuitRoutingDataSource;
 import org.mints.masterslave.datasource.SuitRoutingDataSourceContext;
-//import org.mints.masterslave.filter.ProductFilter;
+import org.mints.masterslave.filter.ProductFilter;
 import org.mints.masterslave.suit.SuitAcquireImplement;
 import org.mints.masterslave.suit.SuitAcquireInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 
@@ -28,14 +30,14 @@ public class SuitDataSourceConfiguration {
     @Bean(name = "dataSource")
     //@Primary
     SuitRoutingDataSource routingDataSource() {
-        log.info("[MsDynamic][SuitDataSourceConfiguration] 创建RoutingDataSource");
+        log.info("[ms-ds][SuitDataSourceConfiguration] 创建RoutingDataSource");
         SuitRoutingDataSource rds = new SuitRoutingDataSource();
         return rds;
     }
 
     @Bean
     JdbcTemplate jdbcTemplate() {
-        log.info("[MsDynamic][SuitDataSourceConfiguration] 创建jdbcTemplate");
+        log.info("[ms-ds][SuitDataSourceConfiguration] 创建jdbcTemplate");
         DruidDataSource dataSource = SuitRoutingDataSource.getDruidDataSource(SuitRoutingDataSourceContext.getMainKey());
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         jdbcTemplate.setDataSource(dataSource);
@@ -44,17 +46,19 @@ public class SuitDataSourceConfiguration {
 
     @Bean
     SuitAcquireInterface suitAcquireImplement(SuitRoutingDataSource routingDataSource, JdbcTemplate jdbcTemplate) {
-        log.info("[MsDynamic][SuitDataSourceConfiguration] 创建SuitAcquireInterface");
+        log.info("[ms-ds][SuitDataSourceConfiguration] 创建SuitAcquireInterface");
         SuitAcquireInterface suitAcquireImplement = new SuitAcquireImplement(jdbcTemplate);
         routingDataSource.setSuitAcquireInterface(suitAcquireImplement);
         return suitAcquireImplement;
     }
 
-//    @Bean
-//    ProductFilter timeFilter() {
-//        log.info("[MsDynamic][SuitDataSourceConfiguration] 创建TimeFilter");
-//        return new ProductFilter();
-//    }
+    @ConditionalOnProperty(value = {"ms-datasource.product-default-mode"}, havingValue = "true", matchIfMissing = false)
+    @DependsOn({"dataSourceMain","dataSource"})
+    @Bean
+    ProductFilter pdFilter(JdbcTemplate jdbcTemplate) {
+        log.info("[ms-ds][SuitDataSourceConfiguration] 创建TimeFilter");
+        return new ProductFilter(jdbcTemplate);
+    }
 
 
 //    @PostConstruct

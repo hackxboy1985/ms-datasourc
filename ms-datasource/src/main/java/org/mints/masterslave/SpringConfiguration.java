@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
 import javax.annotation.PostConstruct;
 
 @Configuration
-@Import({SuitDataSourceConfiguration.class,DataSourceConfiguration.class, DsStragetyConfiguration.class, JpaFirstConfiguration.class})
+@Import({DataSourceConfiguration.class,SuitDataSourceConfiguration.class, DsStragetyConfiguration.class, JpaFirstConfiguration.class})
 @ConditionalOnProperty(value = {"ms-datasource.enabled"}, matchIfMissing = false)
 public class SpringConfiguration {
 
@@ -20,6 +20,9 @@ public class SpringConfiguration {
 
     @Value("${ms-datasource.suit-enabled:false}")
     Boolean suitEnabled;
+
+    @Value("${ms-datasource.product-default-mode:true}")
+    String productMode;
 
     @Value("${ms-datasource.log.enabled:false}")
     Boolean logEnabled;
@@ -33,6 +36,7 @@ public class SpringConfiguration {
     @PostConstruct
     void init(){
         LOG.info("[ms-ds]主从数据源多账套模式:{}",suitEnabled);
+        LOG.info("[ms-ds]主从数据源多账套产品缺省识别模式:{}",productMode);
         LOG.info("[ms-ds]主从数据源策略模式:{}",strategy);
         LOG.info("[ms-ds]主从数据源package:{}",domainpackages);
         LOG.info("[ms-ds]主从数据源日志开关:{}",logEnabled);

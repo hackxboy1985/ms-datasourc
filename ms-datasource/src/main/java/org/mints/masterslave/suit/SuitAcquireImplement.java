@@ -40,7 +40,7 @@ public class SuitAcquireImplement implements SuitAcquireInterface{
             //log.error(e.getMessage(),e);
         }
         if (suitDataSource == null){
-            log.info("[MsDynamic][SuitAcquire]Query Ds {}-{} empty! please verity the datasource info in table: suit_datasource",product,dsindex);
+            log.info("[ms-ds][SuitAcquire]Query Ds {}-{} empty! please verity the datasource info in table: suit_datasource",product,dsindex);
             throw new InvalidParameterException(product+ SuitRoutingDataSourceContext.SUIT_SEPERATE+dsindex+"-账套不存在,请检查该产品数据库配置");
         }
 

@@ -34,7 +34,12 @@ ms-datasource:
     suit-default-ds-name: MASTER
     # 策略自动读写分离
     strategy: NORMAL_RW # NORMAL_RW TX_WRITE_FIRST
+    # 数据源以druid格式加载
     type: com.alibaba.druid.pool.DruidDataSource
+    # 是否使用缺省产品识别模式
+    product-default-mode: true
+    # 缺省产品识别模式使用http头哪个字段
+    product-default-mode-http-header-pd-field: pkgName
     main:
       driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
       url: jdbc:log4jdbc:mysql://127.0.0.1:3306/api_main?useUnicode=true&allowMultiQueries=true&useSSL=false&characterEncoding=UTF-8
@@ -45,6 +50,7 @@ ms-datasource:
       # 最小空闲连接数
       min-idle: 1
       max-active: 20
+      max-wait: 30000
 
     master:
 #      driver-class-name: com.mysql.jdbc.Driver
