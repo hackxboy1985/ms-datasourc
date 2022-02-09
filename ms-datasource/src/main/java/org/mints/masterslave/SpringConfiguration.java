@@ -5,12 +5,16 @@ import org.mints.masterslave.strategy.DsStragetyConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.Ordered;
 
 import javax.annotation.PostConstruct;
 
+//@AutoConfigureBefore(SuitDataSourceConfiguration.class)
 @Configuration
 @Import({DataSourceConfiguration.class,SuitDataSourceConfiguration.class, DsStragetyConfiguration.class, JpaFirstConfiguration.class})
 @ConditionalOnProperty(value = {"ms-datasource.enabled"}, matchIfMissing = false)

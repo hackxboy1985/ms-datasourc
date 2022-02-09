@@ -9,17 +9,19 @@ import org.mints.masterslave.suit.SuitAcquireImplement;
 import org.mints.masterslave.suit.SuitAcquireInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.Ordered;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 
 /**
  * 根据spring.datasource.type配置决定是否启动当前多账套数据源
  */
+//@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
 //@ConditionalOnProperty(value = {"spring.datasource.type"}, havingValue = "org.mints.masterslave.datasource.SuitRoutingDataSource", matchIfMissing = false)
 @ConditionalOnProperty(value = {"ms-datasource.suit-enabled"}, matchIfMissing = false)
@@ -61,13 +63,10 @@ public class SuitDataSourceConfiguration {
     @ConditionalOnProperty(value = {"ms-datasource.product-default-mode"}, havingValue = "true", matchIfMissing = false)
     @DependsOn({"dataSourceMain","dataSource"})
     @Bean
-    ProductFilter pdFilter(JdbcTemplate jdbcTemplate) {
+    ProductFilter pdFilter(JdbcTemplate jdbcTemplate,SuitAcquireInterface suitAcquireInterface /*放这只是为了提前初始化*/) {
         log.info("[ms-ds][SuitDataSourceConfiguration] 创建ProductFilter");
         return new ProductFilter(productUtils(jdbcTemplate));
     }
 
 
-//    @PostConstruct
-//    void init() {
-//    }
 }
