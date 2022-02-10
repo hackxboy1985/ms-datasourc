@@ -61,7 +61,7 @@ public class SuitDataSourceConfiguration {
         return new DsMemoryCacheUtil<>();
     }
 
-    @ConditionalOnProperty(value = {"ms-datasource.product-default-mode"}, havingValue = "true", matchIfMissing = false)
+//    @ConditionalOnProperty(value = {"ms-datasource.product-default-mode"}, havingValue = "true", matchIfMissing = false)
     @Bean
     ProductUtils productUtils(){
         return new ProductUtils(jdbcTemplate(),getMemoryCache());
