@@ -2,6 +2,8 @@ package org.mints.masterslave;
 
 
 import org.mints.masterslave.entity.PkgDataSource;
+import org.mints.masterslave.utils.DsMemoryCacheUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,13 +12,19 @@ import org.springframework.util.StringUtils;
 
 import java.security.InvalidParameterException;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.Callable;
 
 public class ProductUtils {
 
     private JdbcTemplate jdbcTemplate;
 
-    public ProductUtils(JdbcTemplate jdbcTemplate){
+    @Autowired
+    DsMemoryCacheUtil<PkgDataSource> dsMemoryCacheUtil;
+
+    public ProductUtils(JdbcTemplate jdbcTemplate,DsMemoryCacheUtil<PkgDataSource> dsMemoryCacheUtil){
         this.jdbcTemplate = jdbcTemplate;
+        this.dsMemoryCacheUtil = dsMemoryCacheUtil;
     }
 
     /**
@@ -27,20 +35,29 @@ public class ProductUtils {
     public PkgDataSource getSuitProduct(String pkg) {
         if(StringUtils.isEmpty(pkg))
             throw new InvalidParameterException("参数pkg异常-"+pkg);
-        String sql = "select ds from pkg_datasource where pkg= ? ";
-        RowMapper<PkgDataSource> rowMapper = new BeanPropertyRowMapper<>(PkgDataSource.class);
-        PkgDataSource pkgDataSource = null;
-        try {
-            pkgDataSource = jdbcTemplate.queryForObject(sql, rowMapper, pkg);
-        }catch (EmptyResultDataAccessException e){
-            //log.error(e.getMessage(),e);
-        }
+
+        Optional<PkgDataSource> ds = dsMemoryCacheUtil.findObject(pkg, new Callable<PkgDataSource>() {
+            @Override
+            public PkgDataSource call() throws Exception {
+                String sql = "select pkg,ds from pkg_datasource where pkg= ? ";
+                RowMapper<PkgDataSource> rowMapper = new BeanPropertyRowMapper<>(PkgDataSource.class);
+                PkgDataSource pkgDataSource = null;
+                try {
+                    pkgDataSource = jdbcTemplate.queryForObject(sql, rowMapper, pkg);
+                }catch (EmptyResultDataAccessException e){
+                    //log.error(e.getMessage(),e);
+                }
+                return pkgDataSource;
+            }
+        });
 
 //        if (pkgDataSource == null){
 //            logger.info("[ms-ds][ProductFilter]Query product {} empty! please verity the datasource info in table: pkg_datasource",pkg);
 //            throw new InvalidParameterException(pkg+"-包配置不存在,请检查该产品数据源配置");
 //        }
-        return pkgDataSource;
+        if (ds.isPresent())
+            return ds.get();
+        throw new RuntimeException("查询不到"+pkg+"对应的数据源");
     }
 
     /**

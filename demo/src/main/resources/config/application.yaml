@@ -27,7 +27,7 @@ ms-datasource:
     # 多账套开启:false则读取master/slave,true则仅读取main
     suit-enabled: true
     # 日志开关
-    log.enabled: true
+    log.enabled: false
     # 驼峰命名
     implicit-naming: true
     # 缺省数据源

@@ -64,6 +64,7 @@ public class ProductFilter implements Filter {
             filterChain.doFilter(request, response);
             SuitRoutingDataSourceContext.clearThreadLocalAllKey();
         }catch (RuntimeException e){
+            logger.error(e.getMessage(),e);
             throw new InvalidParameterException("未正确配置产品");
         }
 

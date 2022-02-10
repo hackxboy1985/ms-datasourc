@@ -4,9 +4,11 @@ package org.mints.masterslave;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.mints.masterslave.datasource.SuitRoutingDataSource;
 import org.mints.masterslave.datasource.SuitRoutingDataSourceContext;
+import org.mints.masterslave.entity.PkgDataSource;
 import org.mints.masterslave.filter.ProductFilter;
 import org.mints.masterslave.suit.SuitAcquireImplement;
 import org.mints.masterslave.suit.SuitAcquireInterface;
+import org.mints.masterslave.utils.DsMemoryCacheUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -54,10 +56,15 @@ public class SuitDataSourceConfiguration {
         return suitAcquireImplement;
     }
 
+    @Bean
+    DsMemoryCacheUtil getMemoryCache(){
+        return new DsMemoryCacheUtil<>();
+    }
+
     @ConditionalOnProperty(value = {"ms-datasource.product-default-mode"}, havingValue = "true", matchIfMissing = false)
     @Bean
-    ProductUtils productUtils(JdbcTemplate jdbcTemplate){
-        return new ProductUtils(jdbcTemplate);
+    ProductUtils productUtils(){
+        return new ProductUtils(jdbcTemplate(),getMemoryCache());
     }
 
     @ConditionalOnProperty(value = {"ms-datasource.product-default-mode"}, havingValue = "true", matchIfMissing = false)
@@ -65,7 +72,7 @@ public class SuitDataSourceConfiguration {
     @Bean
     ProductFilter pdFilter(JdbcTemplate jdbcTemplate,SuitAcquireInterface suitAcquireInterface /*放这只是为了提前初始化*/) {
         log.info("[ms-ds][SuitDataSourceConfiguration] 创建ProductFilter");
-        return new ProductFilter(productUtils(jdbcTemplate));
+        return new ProductFilter(productUtils());
     }
 
 
