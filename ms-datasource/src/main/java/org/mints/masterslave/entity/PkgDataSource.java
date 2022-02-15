@@ -18,6 +18,8 @@ public class PkgDataSource {
 
     private String ds;
 
+    private String remark;
+
     private Date createDate;
 
     private Date updateDate;
