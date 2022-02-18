@@ -30,7 +30,7 @@ public class SuitAcquireImplement implements SuitAcquireInterface{
         String[] split = suitname.split(SuitRoutingDataSourceContext.SUIT_SEPERATE);
         String product = split[0];
         String dsindex = split[1];//split.length > 1 ? split[1]: DS_READ;
-        String sql = "select name, dbindex, url, username, password from suit_datasource where name= ? and dbindex = ?";
+        String sql = "select name, dbindex, url, username, password from suit_datasource_main where name= ? and dbindex = ?";
         RowMapper<SuitDataSource> rowMapper = new BeanPropertyRowMapper<>(SuitDataSource.class);
         SuitDataSource suitDataSource = null;
         try {
@@ -41,7 +41,7 @@ public class SuitAcquireImplement implements SuitAcquireInterface{
             //log.error(e.getMessage(),e);
         }
         if (suitDataSource == null){
-            log.info("[ms-ds][SuitAcquire]Query Ds {}-{} empty! please verity the datasource info in table: suit_datasource",product,dsindex);
+            log.info("[ms-ds][SuitAcquire]Query Ds {}-{} empty! please verity the datasource info in table: suit_datasource_main",product,dsindex);
             if (SuitRoutingDataSourceContext.MAIN_KEY.equalsIgnoreCase(product)) {
                 throw new InvalidParameterException("未正确配置产品");
             } else {
@@ -54,7 +54,7 @@ public class SuitAcquireImplement implements SuitAcquireInterface{
 
     @Override
     public List<SuitDataSource> getSuitProducts() {
-        String sql = "select name,url from suit_datasource group by name ";
+        String sql = "select name,url from suit_datasource_main group by name ";
         List<SuitDataSource> suitDataSourceList = null;
         try {
             suitDataSourceList = jdbcTemplate.query(sql, new BeanPropertyRowMapper(SuitDataSource.class));
