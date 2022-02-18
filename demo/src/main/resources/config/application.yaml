@@ -34,10 +34,12 @@ ms-datasource:
     suit-default-ds-name: MASTER
     # 策略自动读写分离
     strategy: NORMAL_RW # NORMAL_RW TX_WRITE_FIRST
+    # 数据集-最好加上否则可能扫不到包
+    domain-packages: com.mints.**
     # 数据源以druid格式加载
     type: com.alibaba.druid.pool.DruidDataSource
     # 是否使用缺省产品识别模式
-    product-default-mode: true
+    product-default-mode: false
     # 缺省产品识别模式使用http头哪个字段
     product-default-mode-http-header-pd-field: pkgName
     main:

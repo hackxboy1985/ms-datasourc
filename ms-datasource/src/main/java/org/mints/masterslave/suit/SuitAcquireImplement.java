@@ -36,6 +36,7 @@ public class SuitAcquireImplement implements SuitAcquireInterface{
         try {
             suitDataSource = jdbcTemplate.queryForObject(sql, rowMapper, product, dsindex);
             suitDataSource.setPassword(EncryptAESUtil.detryptFailReturnSrc(suitDataSource.getPassword()));
+            adapterDbindex(suitDataSource);
         }catch (EmptyResultDataAccessException e){
             //log.error(e.getMessage(),e);
         }
@@ -65,10 +66,23 @@ public class SuitAcquireImplement implements SuitAcquireInterface{
                     int lastIndexOf = prefix.lastIndexOf("/");
                     sds.setDb(prefix.substring(lastIndexOf+1,prefix.length()));
                 }
+                adapterDbindex(sds);
             }
             return suitDataSourceList;
         }catch (EmptyResultDataAccessException e){
         }
         return null;
+    }
+
+    /**
+     * 兼容主从数据格式
+     * @param sds
+     */
+    void adapterDbindex(SuitDataSource sds ){
+        if("slaveDataSourceRead".equalsIgnoreCase(sds.getDbindex())){
+            sds.setDbindex("slave");
+        } else if("slaveDataSourceWrite".equalsIgnoreCase(sds.getDbindex())){
+            sds.setDbindex("master");
+        }
     }
 }
