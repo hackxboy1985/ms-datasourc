@@ -45,6 +45,7 @@ public class SuitDataSourceConfiguration {
         DruidDataSource dataSource = SuitRoutingDataSource.getDruidDataSource(SuitRoutingDataSourceContext.getMainKey());
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         jdbcTemplate.setDataSource(dataSource);
+        suitAcquireImplement(routingDataSource(),jdbcTemplate);
         return jdbcTemplate;
     }
 

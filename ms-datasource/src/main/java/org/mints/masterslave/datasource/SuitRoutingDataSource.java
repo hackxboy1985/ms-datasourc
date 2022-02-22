@@ -27,13 +27,6 @@ public class SuitRoutingDataSource extends AbstractRoutingDataSource {
 
     private static final MsLogger log = MsLogger.getLogger(SuitRoutingDataSource.class);
 
-//    @Value("${ms-datasource.main.url}")
-//    private String main_url;
-//    @Value("${ms-datasource.main.username}")
-//    private String main_username;
-//    @Value("${ms-datasource.main.password}")
-//    private String main_password;
-
     //账套的缺省数据源名
     @Value("${ms-datasource.main.suit-default-ds-name:master}")
     private String suit_default_ds_name;
@@ -118,13 +111,9 @@ public class SuitRoutingDataSource extends AbstractRoutingDataSource {
      */
     DruidDataSource createDataSource(String currentAccountSuit) {
         SuitDataSource suitDataSource;
-        if (currentAccountSuit.equalsIgnoreCase(SuitRoutingDataSourceContext.getMainKey())) {
-//            suitDataSource = new SuitDataSource();
-//            suitDataSource.setName(SuitRoutingDataSourceContext.MAIN_KEY);
-//            suitDataSource.setDbindex(SuitRoutingDataSourceContext.MAIN_KEY);
-//            suitDataSource.setUrl(main_url);
-//            suitDataSource.setUsername(main_username);
-//            suitDataSource.setPassword(main_password);
+//        if (currentAccountSuit.equalsIgnoreCase(SuitRoutingDataSourceContext.getMainKey())) {
+        //TODO:fix bug:当主库时，无论读写都使用dataSourceMain
+        if (StringUtils.isEmpty(currentAccountSuit) == false && currentAccountSuit.startsWith(SuitRoutingDataSourceContext.MAIN_KEY+ SuitRoutingDataSourceContext.SUIT_SEPERATE)) {
             return dataSourceMain;
         } else {
             suitDataSource = getSuitDataSource(currentAccountSuit);
