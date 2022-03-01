@@ -1,5 +1,6 @@
 package org.mints.masterslave.datasource;
 
+import com.alibaba.ttl.TransmittableThreadLocal;
 import org.mints.masterslave.logger.MsLogger;
 
 /**
@@ -8,7 +9,7 @@ import org.mints.masterslave.logger.MsLogger;
  */
 class DynamicDataSourceContextHolder {
     private static final MsLogger LOG = MsLogger.getLogger(DynamicDataSourceContextHolder.class);
-    private static final ThreadLocal<DataSourceKey> currentDatesource = new ThreadLocal<DataSourceKey>();
+    private static final ThreadLocal<DataSourceKey> currentDatesource = new TransmittableThreadLocal<>();
 
     /**
      * 清除当前数据源
