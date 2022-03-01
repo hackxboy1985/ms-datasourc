@@ -43,12 +43,15 @@ public class SuitRoutingDataSourceContext {
         //TODO:当未使用注解进行设置数据源时，默认使用主库
         //String key = threadLocalDataSourceKey.get();
         DataSourceKey key = DynamicDataSourceContextHolder.get();
-        if (key == null){
-            return MAIN_KEY + SUIT_SEPERATE + SUID_DS_DEFAULT_KEY;
+        if (key == null) {
+            //return MAIN_KEY + SUIT_SEPERATE + SUID_DS_DEFAULT_KEY;
+            key = DataSourceKey.MASTER;
         }
         //TODO:当使用了注解进行设置数据源时，产品key才生效
         String product = threadLocalProductKey.get();
         product = product == null ? MAIN_KEY : product;
+
+
         return product + SUIT_SEPERATE + key.name().toLowerCase();
     }
 
