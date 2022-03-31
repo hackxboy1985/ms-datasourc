@@ -4,6 +4,7 @@ package org.mints.masterslave;
 import org.mints.masterslave.entity.PkgDataSource;
 import org.mints.masterslave.utils.DsMemoryCacheUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,8 +20,13 @@ public class ProductUtils {
 
     private JdbcTemplate jdbcTemplate;
 
+    @Value("${ms-datasource.service-group:}")
+    String serviceGroup;
+
     @Autowired
     DsMemoryCacheUtil<PkgDataSource> dsMemoryCacheUtil;
+
+
 
     public ProductUtils(JdbcTemplate jdbcTemplate,DsMemoryCacheUtil<PkgDataSource> dsMemoryCacheUtil){
         this.jdbcTemplate = jdbcTemplate;
@@ -40,10 +46,17 @@ public class ProductUtils {
             @Override
             public PkgDataSource call() throws Exception {
                 String sql = "select pkg,ds,name,remark from api_pkg_datasource where pkg= ? ";
+                if (StringUtils.isEmpty(serviceGroup) == false){
+                    sql += " and service = ?";
+                }
                 RowMapper<PkgDataSource> rowMapper = new BeanPropertyRowMapper<>(PkgDataSource.class);
                 PkgDataSource pkgDataSource = null;
                 try {
-                    pkgDataSource = jdbcTemplate.queryForObject(sql, rowMapper, pkg);
+                    if (StringUtils.isEmpty(serviceGroup) == false){
+                        pkgDataSource = jdbcTemplate.queryForObject(sql, rowMapper, pkg, serviceGroup);
+                    }else{
+                        pkgDataSource = jdbcTemplate.queryForObject(sql, rowMapper, pkg);
+                    }
                 }catch (EmptyResultDataAccessException e){
                     //log.error(e.getMessage(),e);
                 }
@@ -66,10 +79,17 @@ public class ProductUtils {
      */
     public List<PkgDataSource> getSuitProductList() {
         String sql = "select id,pkg,ds,name,remark from api_pkg_datasource";
+        if (StringUtils.isEmpty(serviceGroup) == false) {
+            sql += " where service = ?";
+        }
         RowMapper<PkgDataSource> rowMapper = new BeanPropertyRowMapper<>(PkgDataSource.class);
         List<PkgDataSource> pkgDataSource = null;
         try {
-            pkgDataSource = jdbcTemplate.query(sql, rowMapper);
+            if (StringUtils.isEmpty(serviceGroup) == false) {
+                pkgDataSource = jdbcTemplate.query(sql, rowMapper, serviceGroup);
+            } else {
+                pkgDataSource = jdbcTemplate.query(sql, rowMapper);
+            }
         }catch (EmptyResultDataAccessException e){
             //log.error(e.getMessage(),e);
         }

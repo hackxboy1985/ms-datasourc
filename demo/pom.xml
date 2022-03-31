@@ -16,7 +16,7 @@
         <dependency>
             <groupId>com.mints-id</groupId>
             <artifactId>ms-datasource</artifactId>
-            <version>1.2.1</version>
+            <version>1.2.3</version>
         </dependency>
 
         <dependency>

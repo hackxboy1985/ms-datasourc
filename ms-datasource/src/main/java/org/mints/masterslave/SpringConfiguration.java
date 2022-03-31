@@ -28,6 +28,9 @@ public class SpringConfiguration {
     @Value("${ms-datasource.product-default-mode:false}")
     String productMode;
 
+    @Value("${ms-datasource.service-group:}")
+    String serviceGroup;
+
     @Value("${ms-datasource.log.enabled:false}")
     Boolean logEnabled;
 
@@ -41,6 +44,7 @@ public class SpringConfiguration {
     void init(){
         LOG.info("[ms-ds]主从数据源多账套模式:{}",suitEnabled);
         LOG.info("[ms-ds]主从数据源多账套产品缺省识别模式:{}",productMode);
+        LOG.info("[ms-ds]主从数据源多账套服务分组:{}",serviceGroup);
         LOG.info("[ms-ds]主从数据源策略模式:{}",strategy);
         LOG.info("[ms-ds]主从数据源package:{}",domainpackages);
         LOG.info("[ms-ds]主从数据源日志开关:{}",logEnabled);
