@@ -1,7 +1,10 @@
 package com.mints.demo.domain.first;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name = "f_user")
 public class User {
@@ -14,33 +17,7 @@ public class User {
 
     private Integer age;
 
-    @Column(name = "testAge")
-    private Integer test_age;
+//    @Column(name = "testAge")
+//    private Integer test_age;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-    public void setTestAge(Integer age) {
-        this.test_age = age;
-    }
 }

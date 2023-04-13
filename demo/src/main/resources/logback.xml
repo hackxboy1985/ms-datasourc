@@ -6,7 +6,7 @@
     <springProperty scope="context" name="ip" source="spring.cloud.client.ip-address" />
 
     <!-- 定义日志的根目录 -->
-    <property name="LOG_HOME" value="/opt/app/log/twodatasource"/>
+    <property name="LOG_HOME" value="/opt/app/log/ms-datasource"/>
 
 
     <!--输出到文件-->

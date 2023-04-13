@@ -27,7 +27,7 @@ ms-datasource:
     # 多账套开启:false则读取master/slave,true则仅读取main
     suit-enabled: true
     # 日志开关
-    log.enabled: false
+    log.enabled: true
     # 驼峰命名
     implicit-naming: true
     # 缺省数据源
@@ -44,7 +44,7 @@ ms-datasource:
     product-default-mode-http-header-pd-field: pkgName
     main:
       driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      url: jdbc:log4jdbc:mysql://127.0.0.1:3306/api_main?useUnicode=true&allowMultiQueries=true&useSSL=false&characterEncoding=UTF-8
+      url: jdbc:log4jdbc:mysql://mysql:3306/api_main?useUnicode=true&allowMultiQueries=true&useSSL=false&characterEncoding=UTF-8
       username: root
       password:
       # 初始化连接大小

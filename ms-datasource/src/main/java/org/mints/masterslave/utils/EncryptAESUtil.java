@@ -223,7 +223,7 @@ public class EncryptAESUtil {
                 return new String(detrypted, "UTF-8");
             }
         } catch (Exception e) {
-            logger.error("报文解密失败-msg={}, error={}", message, e.getMessage(), e);
+            logger.error("报文解密失败-msg={}, error={}", message, e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -234,7 +234,7 @@ public class EncryptAESUtil {
         try {
             return detrypt(message);
         } catch (Exception e) {
-            logger.error("报文解密失败-返回原文-msg={}, error={}", message, e.getMessage(), e);
+            //logger.error("报文解密失败-返回原文-msg={}, error={}", message, e.getMessage());
             return message;
         }
     }
