@@ -45,7 +45,7 @@ public class ProductUtils {
         Optional<PkgDataSource> ds = dsMemoryCacheUtil.findObject(pkg, new Callable<PkgDataSource>() {
             @Override
             public PkgDataSource call() throws Exception {
-                String sql = "select pkg,ds,name,remark from api_pkg_datasource where pkg= ? ";
+                String sql = "select * from api_pkg_datasource where pkg= ? ";
                 if (StringUtils.isEmpty(serviceGroup) == false){
                     sql += " and service = ?";
                 }
@@ -78,7 +78,7 @@ public class ProductUtils {
      * @return list
      */
     public List<PkgDataSource> getSuitProductList() {
-        String sql = "select id,pkg,ds,name,remark from api_pkg_datasource";
+        String sql = "select * from api_pkg_datasource";
         if (StringUtils.isEmpty(serviceGroup) == false) {
             sql += " where service = ?";
         }

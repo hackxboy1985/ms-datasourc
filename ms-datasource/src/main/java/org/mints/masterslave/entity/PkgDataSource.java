@@ -22,6 +22,16 @@ public class PkgDataSource {
 
     private String remark;
 
+    private String service;
+
+    private String bodyId;
+
+    private String bk1;
+
+    private String bk2;
+
+    private String bk3;
+
     private Date createDate;
 
     private Date updateDate;
