@@ -224,7 +224,7 @@ public class EncryptAESUtil {
             }
         } catch (Exception e) {
             logger.error("报文解密失败-msg={}, error={}", message, e.getMessage());
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
 
         return "";
